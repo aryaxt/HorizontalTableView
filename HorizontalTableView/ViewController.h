@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HorizontalTableView.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <HorizontalTableViewDelegate, HorizontalTableViewDataSource>
 
 @end

@@ -22,6 +22,7 @@
 		15C9AC50189A240D006E6F27 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C9AC2F189A240D006E6F27 /* UIKit.framework */; };
 		15C9AC58189A240D006E6F27 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15C9AC56189A240D006E6F27 /* InfoPlist.strings */; };
 		15C9AC5A189A240D006E6F27 /* HorizontalTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC59189A240D006E6F27 /* HorizontalTableViewTests.m */; };
+		15C9AC66189A2440006E6F27 /* HorizontalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC65189A2440006E6F27 /* HorizontalTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		15C9AC55189A240D006E6F27 /* HorizontalTableViewTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HorizontalTableViewTests-Info.plist"; sourceTree = "<group>"; };
 		15C9AC57189A240D006E6F27 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		15C9AC59189A240D006E6F27 /* HorizontalTableViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableViewTests.m; sourceTree = "<group>"; };
+		15C9AC64189A2440006E6F27 /* HorizontalTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTableView.h; sourceTree = "<group>"; };
+		15C9AC65189A2440006E6F27 /* HorizontalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +117,7 @@
 		15C9AC31189A240D006E6F27 /* HorizontalTableView */ = {
 			isa = PBXGroup;
 			children = (
+				15C9AC63189A2423006E6F27 /* Source */,
 				15C9AC3A189A240D006E6F27 /* AppDelegate.h */,
 				15C9AC3B189A240D006E6F27 /* AppDelegate.m */,
 				15C9AC3D189A240D006E6F27 /* Main_iPhone.storyboard */,
@@ -153,6 +157,15 @@
 				15C9AC56189A240D006E6F27 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		15C9AC63189A2423006E6F27 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				15C9AC64189A2440006E6F27 /* HorizontalTableView.h */,
+				15C9AC65189A2440006E6F27 /* HorizontalTableView.m */,
+			);
+			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -254,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15C9AC45189A240D006E6F27 /* ViewController.m in Sources */,
+				15C9AC66189A2440006E6F27 /* HorizontalTableView.m in Sources */,
 				15C9AC3C189A240D006E6F27 /* AppDelegate.m in Sources */,
 				15C9AC38189A240D006E6F27 /* main.m in Sources */,
 			);

@@ -8,22 +8,33 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
-
-@end
-
 @implementation ViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - HorizontalTableViewDelegate & HorizontalTableViewDataSource -
+
+- (NSInteger)numberOfRowsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	return 30;
+}
+
+- (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index
+{
+	return 30;
+}
+
+- (UIView *)horizontalTableView:(HorizontalTableView *)horizontalTableView viewForColumnAtIndex:(NSInteger)index
+{
+	return [[UIView alloc] init];
+}
+
+- (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(NSInteger)index
+{
+	
 }
 
 @end
