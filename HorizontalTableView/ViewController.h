@@ -11,4 +11,6 @@
 
 @interface ViewController : UIViewController <HorizontalTableViewDelegate, HorizontalTableViewDataSource>
 
+@property (nonatomic, strong) IBOutlet HorizontalTableView *horizontalTableView;
+
 @end

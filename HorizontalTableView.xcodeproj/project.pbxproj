@@ -23,6 +23,7 @@
 		15C9AC58189A240D006E6F27 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 15C9AC56189A240D006E6F27 /* InfoPlist.strings */; };
 		15C9AC5A189A240D006E6F27 /* HorizontalTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC59189A240D006E6F27 /* HorizontalTableViewTests.m */; };
 		15C9AC66189A2440006E6F27 /* HorizontalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC65189A2440006E6F27 /* HorizontalTableView.m */; };
+		15C9AC69189A3139006E6F27 /* HorizontalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC68189A3139006E6F27 /* HorizontalTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		15C9AC59189A240D006E6F27 /* HorizontalTableViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableViewTests.m; sourceTree = "<group>"; };
 		15C9AC64189A2440006E6F27 /* HorizontalTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTableView.h; sourceTree = "<group>"; };
 		15C9AC65189A2440006E6F27 /* HorizontalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableView.m; sourceTree = "<group>"; };
+		15C9AC67189A3139006E6F27 /* HorizontalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTableViewCell.h; sourceTree = "<group>"; };
+		15C9AC68189A3139006E6F27 /* HorizontalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +167,8 @@
 			children = (
 				15C9AC64189A2440006E6F27 /* HorizontalTableView.h */,
 				15C9AC65189A2440006E6F27 /* HorizontalTableView.m */,
+				15C9AC67189A3139006E6F27 /* HorizontalTableViewCell.h */,
+				15C9AC68189A3139006E6F27 /* HorizontalTableViewCell.m */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 				15C9AC45189A240D006E6F27 /* ViewController.m in Sources */,
 				15C9AC66189A2440006E6F27 /* HorizontalTableView.m in Sources */,
 				15C9AC3C189A240D006E6F27 /* AppDelegate.m in Sources */,
+				15C9AC69189A3139006E6F27 /* HorizontalTableViewCell.m in Sources */,
 				15C9AC38189A240D006E6F27 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

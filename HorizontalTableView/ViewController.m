@@ -13,23 +13,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+	
+	self.horizontalTableView.delegate = self;
+	self.horizontalTableView.dataSource = self;
+	[self.horizontalTableView reloadData];
 }
 
 #pragma mark - HorizontalTableViewDelegate & HorizontalTableViewDataSource -
 
-- (NSInteger)numberOfRowsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
+- (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
 {
 	return 30;
 }
 
 - (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index
 {
-	return 30;
+	return 100;
 }
 
-- (UIView *)horizontalTableView:(HorizontalTableView *)horizontalTableView viewForColumnAtIndex:(NSInteger)index
+- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSInteger)index
 {
-	return [[UIView alloc] init];
+	HorizontalTableViewCell *cell = [self.horizontalTableView dequeueReusableViewWithIdentifier:@"MyView"];
+	
+	if (!cell)
+	{
+		cell = [[HorizontalTableViewCell alloc] initWithFrame:CGRectMake(0, 0, 70, 100)];
+		
+		UILabel *lbl = [[UILabel alloc] initWithFrame:cell.frame];
+		lbl.text = @"Hello";
+		[cell addSubview:lbl];
+	}
+	
+	return cell;
 }
 
 - (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(NSInteger)index

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HorizontalTableViewCell.h"
 
 @class HorizontalTableView;
 @protocol HorizontalTableViewDelegate <UIScrollViewDelegate>
@@ -14,9 +15,9 @@
 @end
 
 @protocol HorizontalTableViewDataSource <NSObject>
-- (NSInteger)numberOfRowsInHorizontalTableView:(HorizontalTableView *)horizontalTableView;
+- (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView;
 - (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index;
-- (UIView *)horizontalTableView:(HorizontalTableView *)horizontalTableView viewForColumnAtIndex:(NSInteger)index;
+- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSInteger)index;
 @end
 
 @interface HorizontalTableView : UIScrollView
@@ -24,7 +25,7 @@
 @property (nonatomic, weak) IBOutlet id <HorizontalTableViewDelegate> delegate;
 @property (nonatomic, weak) IBOutlet id <HorizontalTableViewDataSource> dataSource;
 
-- (UIView *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
+- (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
 - (void)beginUpdates;
 - (void)endUpdates;
 - (void)reloadData;
