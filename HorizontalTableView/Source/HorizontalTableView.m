@@ -9,7 +9,7 @@
 #import "HorizontalTableView.h"
 
 @interface HorizontalTableView()
-@property (nonatomic, strong) NSMutableSet *reusableCellQueue;
+@property (nonatomic, strong) NSMutableArray *reusableCellQueue;
 @property (nonatomic, assign) BOOL isEditing;
 @end
 
@@ -41,7 +41,7 @@
 
 - (void)initialize
 {
-	self.reusableCellQueue = [NSMutableSet set];
+	self.reusableCellQueue = [NSMutableArray array];
 }
 
 #pragma mark - Overrides -
@@ -74,11 +74,15 @@
 
 - (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier
 {
-	for (HorizontalTableViewCell *cell in self.reusableCellQueue)
+	for (int i=0 ; i<self.reusableCellQueue.count ; i++)
 	{
+		HorizontalTableViewCell *cell = [self.reusableCellQueue objectAtIndex:i];
+		
 		if ([cell.identifier isEqual:identifier])
-			NSLog(@"dequeue");
+		{
+			[self.reusableCellQueue removeObject:cell];
 			return cell;
+		}
 	}
 	
 	return nil;
@@ -103,9 +107,16 @@
 	return [self.dataSource numberOfColumnsInHorizontalTableView:self];
 }
 
-- (HorizontalTableViewCell *)viewAtIndex:(NSInteger)index
+- (HorizontalTableViewCell *)cellAtIndex:(NSInteger)index
 {
-	return [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
+	HorizontalTableViewCell *cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
+	cell.index = index;
+	return cell;
+}
+
+- (CGFloat)widthAtIndex:(NSInteger)index
+{
+	return [self.dataSource horizontalTableView:self widthForColumAtIndex:index];
 }
 
 - (CGRect)visibleRect
@@ -125,10 +136,13 @@
 		
 		if (CGRectIntersectsRect(visibleRect, rectForView))
 		{
-			HorizontalTableViewCell *cell = [self viewAtIndex:i];
+			HorizontalTableViewCell *cell = [self cellAtIndex:i];
+			cell.index = i;
 			cell.frame = rectForView;
 			[self addSubview:cell];
 		}
+		
+		// Improve performance get out of this loop
 		
 		x += widthForIndex;
 	}
@@ -137,6 +151,65 @@
 - (void)addCellsToViewIfNeeded
 {
 	CGRect visibleRect = [self visibleRect];
+	
+	HorizontalTableViewCell *firstVisibleCell = [self firstVisibleCell];
+	HorizontalTableViewCell *lastVisibleCell = [self lastVisibleCell];
+	
+	if (firstVisibleCell.frame.origin.x > visibleRect.origin.x &&
+		firstVisibleCell.index > 0)
+	{
+		//NSLog(@"Add leftC ell");
+		HorizontalTableViewCell *newFirstCell = [self cellAtIndex:firstVisibleCell.index-1];
+		CGFloat width = [self widthAtIndex:firstVisibleCell.index-1];
+		newFirstCell.frame = CGRectMake(firstVisibleCell.frame.origin.x - width, 0, width, self.frame.size.height);
+		[self addSubview:newFirstCell];
+	}
+	
+	if (lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width < visibleRect.origin.x + visibleRect.size.width &&
+		lastVisibleCell.index < self.numberOfColumns-1)
+	{
+		//NSLog(@"Add right cell");
+		HorizontalTableViewCell *newLastCell = [self cellAtIndex:lastVisibleCell.index+1];
+		CGFloat width = [self widthAtIndex:lastVisibleCell.index+1];
+		newLastCell.frame = CGRectMake(lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width, 0, width, self.frame.size.height);
+		[self addSubview:newLastCell];
+	}
+}
+
+- (HorizontalTableViewCell *)firstVisibleCell
+{
+	HorizontalTableViewCell *firstCell;
+	
+	for (UIView *view in self.subviews)
+	{
+		if ([view isKindOfClass:[HorizontalTableViewCell class]])
+		{
+			HorizontalTableViewCell *cell = (HorizontalTableViewCell *) view;
+			
+			if (!firstCell || cell.index < firstCell.index)
+				firstCell = cell;
+		}
+	}
+	
+	return firstCell;
+}
+
+- (HorizontalTableViewCell *)lastVisibleCell
+{
+	HorizontalTableViewCell *lastCell;
+	
+	for (UIView *view in self.subviews)
+	{
+		if ([view isKindOfClass:[HorizontalTableViewCell class]])
+		{
+			HorizontalTableViewCell *cell = (HorizontalTableViewCell *) view;
+			
+			if (!lastCell || cell.index > lastCell.index)
+				lastCell = cell;
+		}
+	}
+	
+	return lastCell;
 }
 
 - (void)enqueueHiddenCells
@@ -145,7 +218,11 @@
 	{
 		if ([view isKindOfClass:[HorizontalTableViewCell class]] && !CGRectIntersectsRect(self.visibleRect, view.frame))
 		{
-			NSLog(@"enqueue");
+			HorizontalTableViewCell *cell = (HorizontalTableViewCell *)view;
+			//NSLog(@"enqueue: %d", cell.index);
+			
+			cell.index = -1;
+			
 			[view removeFromSuperview];
 			[self.reusableCellQueue addObject:view];
 		}

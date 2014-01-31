@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface HorizontalTableViewCell : UIView
 
 @property (nonatomic, strong) NSString *identifier;
+@property (nonatomic, assign) NSInteger index;
 
 @end
