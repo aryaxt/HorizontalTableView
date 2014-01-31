@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "HorizontalTableView.h"
+#import "MyCell.h"
 
 @interface ViewController : UIViewController <HorizontalTableViewDelegate, HorizontalTableViewDataSource>
 
