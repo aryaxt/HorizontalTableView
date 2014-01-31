@@ -14,6 +14,9 @@
 {
     [super viewDidLoad];
 	
+	self.horizontalTableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+	self.horizontalTableView.layer.borderWidth = .6;
+	
 	self.horizontalTableView.delegate = self;
 	self.horizontalTableView.dataSource = self;
 	[self.horizontalTableView reloadData];
@@ -28,19 +31,18 @@
 
 - (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index
 {
-	return 50;
+	return (index%2 == 0) ? 50 : 100;
 }
 
 - (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSInteger)index
 {
-	NSLog(@"%d", index);
-	
 	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableViewWithIdentifier:@"MyView"];
 	
 	if (!cell)
 		cell = [[MyCell alloc] init];
 	
 	cell.lblTitle.text = [NSString stringWithFormat:@"%d", index];
+	cell.lblTitle.backgroundColor = (index%2 == 0) ? [UIColor greenColor] : [UIColor redColor];
 	
 	return cell;
 }

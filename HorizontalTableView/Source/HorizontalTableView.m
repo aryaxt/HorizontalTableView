@@ -50,7 +50,7 @@
 {
 	[super layoutSubviews];
 	
-	[self enqueueHiddenCells];
+	[self enqueueInvisibleCells];
 	[self addCellsToViewIfNeeded];
 }
 
@@ -139,7 +139,7 @@
 			HorizontalTableViewCell *cell = [self cellAtIndex:i];
 			cell.index = i;
 			cell.frame = rectForView;
-			[self addSubview:cell];
+			[self insertSubview:cell atIndex:0];
 		}
 		
 		// Improve performance get out of this loop
@@ -162,7 +162,7 @@
 		HorizontalTableViewCell *newFirstCell = [self cellAtIndex:firstVisibleCell.index-1];
 		CGFloat width = [self widthAtIndex:firstVisibleCell.index-1];
 		newFirstCell.frame = CGRectMake(firstVisibleCell.frame.origin.x - width, 0, width, self.frame.size.height);
-		[self addSubview:newFirstCell];
+		[self insertSubview:newFirstCell atIndex:1];
 	}
 	
 	if (lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width < visibleRect.origin.x + visibleRect.size.width &&
@@ -172,7 +172,7 @@
 		HorizontalTableViewCell *newLastCell = [self cellAtIndex:lastVisibleCell.index+1];
 		CGFloat width = [self widthAtIndex:lastVisibleCell.index+1];
 		newLastCell.frame = CGRectMake(lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width, 0, width, self.frame.size.height);
-		[self addSubview:newLastCell];
+		[self insertSubview:newLastCell atIndex:1];
 	}
 }
 
@@ -212,7 +212,7 @@
 	return lastCell;
 }
 
-- (void)enqueueHiddenCells
+- (void)enqueueInvisibleCells
 {
 	for (UIView *view in self.subviews)
 	{
@@ -221,10 +221,8 @@
 			HorizontalTableViewCell *cell = (HorizontalTableViewCell *)view;
 			//NSLog(@"enqueue: %d", cell.index);
 			
-			cell.index = -1;
-			
-			[view removeFromSuperview];
-			[self.reusableCellQueue addObject:view];
+			[cell removeFromSuperview];
+			[self.reusableCellQueue addObject:cell];
 		}
 	}
 }

@@ -24,6 +24,8 @@
 		15C9AC5A189A240D006E6F27 /* HorizontalTableViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC59189A240D006E6F27 /* HorizontalTableViewTests.m */; };
 		15C9AC66189A2440006E6F27 /* HorizontalTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC65189A2440006E6F27 /* HorizontalTableView.m */; };
 		15C9AC69189A3139006E6F27 /* HorizontalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC68189A3139006E6F27 /* HorizontalTableViewCell.m */; };
+		15C9AC6D189B3F4A006E6F27 /* MyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C9AC6B189B3F4A006E6F27 /* MyCell.m */; };
+		15C9AC6E189B3F4A006E6F27 /* MyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C9AC6C189B3F4A006E6F27 /* MyCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,9 @@
 		15C9AC65189A2440006E6F27 /* HorizontalTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableView.m; sourceTree = "<group>"; };
 		15C9AC67189A3139006E6F27 /* HorizontalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTableViewCell.h; sourceTree = "<group>"; };
 		15C9AC68189A3139006E6F27 /* HorizontalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HorizontalTableViewCell.m; sourceTree = "<group>"; };
+		15C9AC6A189B3F4A006E6F27 /* MyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyCell.h; path = HorizontalTableView/MyCell.h; sourceTree = SOURCE_ROOT; };
+		15C9AC6B189B3F4A006E6F27 /* MyCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyCell.m; path = HorizontalTableView/MyCell.m; sourceTree = SOURCE_ROOT; };
+		15C9AC6C189B3F4A006E6F27 /* MyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MyCell.xib; path = HorizontalTableView/MyCell.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +126,9 @@
 			isa = PBXGroup;
 			children = (
 				15C9AC63189A2423006E6F27 /* Source */,
+				15C9AC6A189B3F4A006E6F27 /* MyCell.h */,
+				15C9AC6B189B3F4A006E6F27 /* MyCell.m */,
+				15C9AC6C189B3F4A006E6F27 /* MyCell.xib */,
 				15C9AC3A189A240D006E6F27 /* AppDelegate.h */,
 				15C9AC3B189A240D006E6F27 /* AppDelegate.m */,
 				15C9AC3D189A240D006E6F27 /* Main_iPhone.storyboard */,
@@ -253,6 +261,7 @@
 				15C9AC47189A240D006E6F27 /* Images.xcassets in Resources */,
 				15C9AC3F189A240D006E6F27 /* Main_iPhone.storyboard in Resources */,
 				15C9AC36189A240D006E6F27 /* InfoPlist.strings in Resources */,
+				15C9AC6E189B3F4A006E6F27 /* MyCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +285,7 @@
 				15C9AC3C189A240D006E6F27 /* AppDelegate.m in Sources */,
 				15C9AC69189A3139006E6F27 /* HorizontalTableViewCell.m in Sources */,
 				15C9AC38189A240D006E6F27 /* main.m in Sources */,
+				15C9AC6D189B3F4A006E6F27 /* MyCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +504,7 @@
 				15C9AC5F189A240D006E6F27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		15C9AC60189A240D006E6F27 /* Build configuration list for PBXNativeTarget "HorizontalTableViewTests" */ = {
 			isa = XCConfigurationList;
@@ -502,6 +513,7 @@
 				15C9AC62189A240D006E6F27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
