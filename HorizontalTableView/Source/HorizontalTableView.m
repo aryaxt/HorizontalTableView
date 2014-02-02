@@ -10,6 +10,7 @@
 
 @interface HorizontalTableView()
 @property (nonatomic, strong) NSMutableArray *reusableCellQueue;
+@property (nonatomic, strong) NSMutableArray *xLocationOfCells;
 @property (nonatomic, assign) BOOL isEditing;
 @end
 
@@ -41,6 +42,7 @@
 
 - (void)initialize
 {
+	self.xLocationOfCells = [NSMutableArray array];
 	self.reusableCellQueue = [NSMutableArray array];
 }
 
@@ -51,7 +53,7 @@
 	[super layoutSubviews];
 	
 	[self enqueueInvisibleCells];
-	[self addCellsToViewIfNeeded];
+	[self reloadCellsInVisibleContent];
 }
 
 #pragma mark - Public Methods -
@@ -68,7 +70,19 @@
 
 - (void)reloadData
 {
-	[self resizeContentView];
+	[self.xLocationOfCells removeAllObjects];
+	CGFloat x = 0;
+	
+	for (int i=0 ; i<self.numberOfColumns ; i++)
+	{
+		CGFloat width = [self.dataSource horizontalTableView:self widthForColumAtIndex:i];
+		[self.xLocationOfCells insertObject:[NSValue valueWithCGRect:CGRectMake(x, 0, width, self.frame.size.height)] atIndex:i];
+		
+		x+= width;
+	}
+	
+	self.contentSize = CGSizeMake(x, self.frame.size.height);
+	
 	[self reloadCellsInVisibleContent];
 }
 
@@ -90,18 +104,6 @@
 
 #pragma mark - Private Methods -
 
-- (void)resizeContentView
-{
-	CGFloat width = 0;
-	
-	for (int i=0 ; i<self.numberOfColumns ; i++)
-	{
-		width += [self.dataSource horizontalTableView:self widthForColumAtIndex:i];
-	}
-	
-	self.contentSize = CGSizeMake(width, self.frame.size.height);
-}
-
 - (NSInteger)numberOfColumns
 {
 	return [self.dataSource numberOfColumnsInHorizontalTableView:self];
@@ -109,6 +111,17 @@
 
 - (HorizontalTableViewCell *)cellAtIndex:(NSInteger)index
 {
+	for (UIView *view in self.subviews)
+	{
+		if ([view isKindOfClass:[HorizontalTableViewCell class]])
+		{
+			HorizontalTableViewCell *cell = (HorizontalTableViewCell *) view;
+			
+			if (cell.index == index)
+				return cell;
+		}
+	}
+	
 	HorizontalTableViewCell *cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
 	cell.index = index;
 	return cell;
@@ -124,55 +137,41 @@
 	return CGRectMake(self.contentOffset.x, self.contentOffset.y, self.frame.size.width, self.frame.size.height);
 }
 
-- (void)reloadCellsInVisibleContent
+/*- (CGRect)rectForColumnAtIndex:(NSInteger)index
 {
-	CGRect visibleRect = [self visibleRect];
 	CGFloat x = 0;
 	
 	for (int i=0 ; i<self.numberOfColumns ; i++)
 	{
-		CGFloat widthForIndex = [self.dataSource horizontalTableView:self widthForColumAtIndex:i];
-		CGRect rectForView = CGRectMake(x, 0, widthForIndex, self.frame.size.height);
+		x += [self widthAtIndex:i];
+	}
+	
+	return CGRectMake(x, 0, [self widthAtIndex:index], self.frame.size.height);
+}*/
+
+- (void)reloadCellsInVisibleContent
+{
+	CGRect visibleRect = [self visibleRect];
+	
+	for (int i=0 ; i<self.numberOfColumns ; i++)
+	{
+		CGRect rectForView = [[self.xLocationOfCells objectAtIndex:i] CGRectValue];
+		rectForView.size.height = self.frame.size.height;
 		
 		if (CGRectIntersectsRect(visibleRect, rectForView))
 		{
 			HorizontalTableViewCell *cell = [self cellAtIndex:i];
-			cell.index = i;
-			cell.frame = rectForView;
-			[self insertSubview:cell atIndex:0];
+			
+			// If cell is already added don't re-add, it causes lag
+			if (!cell.superview)
+			{
+				cell.index = i;
+				cell.frame = rectForView;
+				[self insertSubview:cell atIndex:0];
+			}
 		}
 		
 		// Improve performance get out of this loop
-		
-		x += widthForIndex;
-	}
-}
-
-- (void)addCellsToViewIfNeeded
-{
-	CGRect visibleRect = [self visibleRect];
-	
-	HorizontalTableViewCell *firstVisibleCell = [self firstVisibleCell];
-	HorizontalTableViewCell *lastVisibleCell = [self lastVisibleCell];
-	
-	if (firstVisibleCell.frame.origin.x > visibleRect.origin.x &&
-		firstVisibleCell.index > 0)
-	{
-		//NSLog(@"Add leftC ell");
-		HorizontalTableViewCell *newFirstCell = [self cellAtIndex:firstVisibleCell.index-1];
-		CGFloat width = [self widthAtIndex:firstVisibleCell.index-1];
-		newFirstCell.frame = CGRectMake(firstVisibleCell.frame.origin.x - width, 0, width, self.frame.size.height);
-		[self insertSubview:newFirstCell atIndex:1];
-	}
-	
-	if (lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width < visibleRect.origin.x + visibleRect.size.width &&
-		lastVisibleCell.index < self.numberOfColumns-1)
-	{
-		//NSLog(@"Add right cell");
-		HorizontalTableViewCell *newLastCell = [self cellAtIndex:lastVisibleCell.index+1];
-		CGFloat width = [self widthAtIndex:lastVisibleCell.index+1];
-		newLastCell.frame = CGRectMake(lastVisibleCell.frame.origin.x + lastVisibleCell.frame.size.width, 0, width, self.frame.size.height);
-		[self insertSubview:newLastCell atIndex:1];
 	}
 }
 

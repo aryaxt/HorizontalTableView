@@ -26,7 +26,7 @@
 
 - (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
 {
-	return 50;
+	return 500;
 }
 
 - (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index
