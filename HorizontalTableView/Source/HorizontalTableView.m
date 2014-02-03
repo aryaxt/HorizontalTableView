@@ -17,6 +17,7 @@
 @implementation HorizontalTableView
 
 #define ROW_ANIMATION_DURATION .2
+#define MAX_ROW_COUNT_IN_QUEUE 10
 
 #pragma mark - Initialization -
 
@@ -185,7 +186,7 @@
 - (void)removeVisibleCells
 {
 	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
-		[cell removeFromSuperview];
+		[self removeCellFromViewAndEnqueueIfNeeded:cell];
 	}];
 }
 
@@ -252,6 +253,7 @@
 - (void)populateCellsInVisibleContent
 {
 	CGRect visibleRect = [self visibleRect];
+	BOOL startedAddingCells = NO;
 	
 	for (int i=0 ; i<self.numberOfColumns ; i++)
 	{
@@ -260,6 +262,7 @@
 		
 		if (CGRectIntersectsRect(visibleRect, rectForView))
 		{
+			startedAddingCells = YES;
 			HorizontalTableViewCell *cell = [self reusableCellAtIndex:i];
 			
 			// If cell is already added don't re-add, it causes lag
@@ -269,6 +272,11 @@
 				cell.frame = rectForView;
 				[self insertSubview:cell atIndex:0];
 			}
+		}
+		else
+		{
+			if (startedAddingCells)
+				break;
 		}
 		
 		// Improve performance get out of this loop
@@ -308,14 +316,16 @@
 {
 	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
 		if (!CGRectIntersectsRect(self.visibleRect, cell.frame))
-		{
-			[cell removeFromSuperview];
-			
-			// There is no need to store more than 2 cells in the queue one for left side, one for right side
-			if (self.reusableCellQueue.count <= 2)
-				[self.reusableCellQueue addObject:cell];
-		}
+			[self removeCellFromViewAndEnqueueIfNeeded:cell];
 	}];
+}
+
+- (void)removeCellFromViewAndEnqueueIfNeeded:(HorizontalTableViewCell *)cell
+{
+	[cell removeFromSuperview];
+	
+	if (self.reusableCellQueue.count < MAX_ROW_COUNT_IN_QUEUE)
+		[self.reusableCellQueue addObject:cell];
 }
 
 @end

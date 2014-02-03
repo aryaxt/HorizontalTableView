@@ -16,12 +16,6 @@
 	
 	self.arrayOfStrings = [NSMutableArray array];
 	
-	for (int i=0 ; i<100 ; i++)
-	{
-		//[self.arrayOfStrings addObject:[NSString stringWithFormat:@"Cell %d", i]];
-	}
-	
-	
 	self.horizontalTableView.layer.borderColor = [UIColor lightGrayColor].CGColor;
 	self.horizontalTableView.layer.borderWidth = .6;
 	
@@ -50,7 +44,14 @@
 	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableViewWithIdentifier:@"MyCell"];
 	
 	if (!cell)
+	{
 		cell = [[MyCell alloc] init];
+		self.numberOfTimesInitializingCell++;
+	}
+	else
+	{
+		self.numberOfTimesDequeueingCells++;
+	}
 	
 	cell.lblTitle.text = [self.arrayOfStrings objectAtIndex:index];
 	cell.lblTitle.backgroundColor = (index%2 == 0) ? [UIColor greenColor] : [UIColor redColor];
@@ -72,24 +73,26 @@
 
 - (IBAction)addRowAndReloadTable:(id)sender
 {
-	[self.arrayOfStrings insertObject:[NSString stringWithFormat:@"Reload %d", self.counter] atIndex:0];
+	for (int i=0 ; i<10 ; i++)
+	{
+		[self.arrayOfStrings insertObject:[NSString stringWithFormat:@"Reload %d", self.insertCounter] atIndex:0];
+		self.insertCounter++;
+	}
 	
 	[self.horizontalTableView reloadData];
 	
 	[self printCellStats];
-	
-	self.counter++;
 }
 
 - (IBAction)insertRowInTable:(id)sender
 {
-	[self.arrayOfStrings insertObject:[NSString stringWithFormat:@"Insert %d", self.counter] atIndex:0];
+	[self.arrayOfStrings insertObject:[NSString stringWithFormat:@"Insert %d", self.insertCounter] atIndex:0];
 	
 	[self.horizontalTableView insertColumnAtIndex:0 withColumnAnimation:HorizontalTableViewColumnAnimationNone];
 	
 	[self printCellStats];
 	
-	self.counter++;
+	self.insertCounter++;
 }
 
 - (IBAction)deleteRowInTable:(id)sender
@@ -115,10 +118,12 @@
 			cellsInViewCount++;
 	}
 	
-	self.lblCellQueueStats.text = [NSString stringWithFormat:@"Cells in queue: %lu \nCells in view: %d \nNumber of columns: %lu",
+	self.lblCellQueueStats.text = [NSString stringWithFormat:@"Cells in queue: %lu \nCells in view: %d \nNumber of columns: %lu \nNumber of cells initialized: %d \nNumber of cells dequeued: %d",
 								   (unsigned long)[[self.horizontalTableView valueForKey:@"reusableCellQueue"] count],
 								   cellsInViewCount,
-								   (unsigned long)self.arrayOfStrings.count];
+								   (unsigned long)self.arrayOfStrings.count,
+								   self.numberOfTimesInitializingCell,
+								   self.numberOfTimesDequeueingCells];
 }
 
 @end
