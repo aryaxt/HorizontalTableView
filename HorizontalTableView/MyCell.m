@@ -15,7 +15,7 @@
 	self = [[[NSBundle mainBundle] loadNibNamed:@"MyCell" owner:nil options:nil] lastObject];
 	self.identifier = @"MyCell";
 	self.layer.borderWidth = .4;
-	self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+	self.layer.borderColor = [UIColor blackColor].CGColor;
 	return self;
 }
 

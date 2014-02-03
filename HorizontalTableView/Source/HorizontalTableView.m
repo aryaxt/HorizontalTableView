@@ -16,6 +16,8 @@
 
 @implementation HorizontalTableView
 
+#define ROW_ANIMATION_DURATION .2
+
 #pragma mark - Initialization -
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -42,6 +44,7 @@
 
 - (void)initialize
 {
+	self.alwaysBounceHorizontal = YES;
 	self.xLocationOfCells = [NSMutableArray array];
 	self.reusableCellQueue = [NSMutableArray array];
 }
@@ -52,38 +55,113 @@
 {
 	[super layoutSubviews];
 	
-	[self enqueueInvisibleCells];
-	[self reloadCellsInVisibleContent];
+	if (!self.isEditing)
+	{
+		[self enqueueInvisibleCells];
+		[self populateCellsInVisibleContent];
+	}
+	
+	// Update cell heights if needed
 }
 
 #pragma mark - Public Methods -
 
-- (void)beginUpdates
-{
-	self.isEditing = YES;
-}
-
-- (void)endUpdates
-{
-	self.isEditing = NO;
-}
-
 - (void)reloadData
 {
-	[self.xLocationOfCells removeAllObjects];
-	CGFloat x = 0;
+	[self removeVisibleCells];
 	
-	for (int i=0 ; i<self.numberOfColumns ; i++)
+	[self populatexLocationOfCellsAndResizeContentView];
+	
+	[self populateCellsInVisibleContent];
+}
+
+- (void)deleteColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)animation
+{
+	if (self.xLocationOfCells.count - 1 != [self numberOfColumns])
+		@throw ([NSException exceptionWithName:@"InvalidNumnberOfColumns"
+										reason:@"Number of columns in datasource after addition is wrong"
+									  userInfo:nil]);
+	
+	[self populatexLocationOfCellsAndResizeContentView];
+	
+	HorizontalTableViewCell *deletingRow = [self visibleCellAtIndex:index];
+	
+	// If deleting row is visible
+	if (deletingRow)
 	{
-		CGFloat width = [self.dataSource horizontalTableView:self widthForColumAtIndex:i];
-		[self.xLocationOfCells insertObject:[NSValue valueWithCGRect:CGRectMake(x, 0, width, self.frame.size.height)] atIndex:i];
+		self.isEditing = YES;
 		
-		x+= width;
+		[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+			if (cell.index > index && cell != deletingRow)
+				cell.index--;
+		}];
+		
+		[UIView animateWithDuration:ROW_ANIMATION_DURATION animations:^{
+			
+			CGRect rect = deletingRow.frame;
+			rect.size.width = 0;
+			deletingRow.frame = rect;
+			
+			[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+				if (cell.index >= index && cell != deletingRow)
+					cell.frame = [[self.xLocationOfCells objectAtIndex:cell.index] CGRectValue];
+			}];
+		} completion:^(BOOL finished) {
+			[deletingRow removeFromSuperview];
+			self.isEditing = NO;
+		}];
 	}
+}
+
+- (void)insertColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)animation
+{
+	if (self.xLocationOfCells.count + 1 != [self numberOfColumns])
+		@throw ([NSException exceptionWithName:@"InvalidNumnberOfColumns"
+										reason:@"Number of columns in datasource after addition is wrong"
+									  userInfo:nil]);
 	
-	self.contentSize = CGSizeMake(x, self.frame.size.height);
+	[self populatexLocationOfCellsAndResizeContentView];
 	
-	[self reloadCellsInVisibleContent];
+	CGRect rectForNewCell = [[self.xLocationOfCells objectAtIndex:index] CGRectValue];
+
+	if (CGRectIntersectsRect(self.visibleRect, rectForNewCell))
+	{
+		self.isEditing = YES;
+		
+		[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+			if (cell.index >= index)
+				cell.index++;
+		}];
+		
+		HorizontalTableViewCell *newCell = [self reusableCellAtIndex:index];
+		rectForNewCell.size.width = 0;
+		newCell.frame = rectForNewCell;
+		[self insertSubview:newCell atIndex:0];
+		
+		[UIView animateWithDuration:ROW_ANIMATION_DURATION animations:^{
+			
+			newCell.frame = [[self.xLocationOfCells objectAtIndex:index] CGRectValue];
+			
+			[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+				if (cell.index > index)
+					cell.frame = [[self.xLocationOfCells objectAtIndex:cell.index] CGRectValue];
+			}];
+		}completion:^(BOOL finished){
+			self.isEditing = NO;
+			[self enqueueInvisibleCells];
+		}];
+	}
+}
+
+- (void)enumerateThroughVisibleCells:(void (^)(HorizontalTableViewCell *cell))block
+{
+	for (UIView *view in self.subviews)
+	{
+		if ([view isKindOfClass:[HorizontalTableViewCell class]])
+		{
+			block((HorizontalTableViewCell *)view);
+		}
+	}
 }
 
 - (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier
@@ -104,12 +182,48 @@
 
 #pragma mark - Private Methods -
 
+- (void)removeVisibleCells
+{
+	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+		[cell removeFromSuperview];
+	}];
+}
+
+- (void)populatexLocationOfCellsAndResizeContentView
+{
+	[self.xLocationOfCells removeAllObjects];
+	CGFloat x = 0;
+	
+	for (int i=0 ; i<self.numberOfColumns ; i++)
+	{
+		CGFloat width = [self.dataSource horizontalTableView:self widthForColumAtIndex:i];
+		[self.xLocationOfCells insertObject:[NSValue valueWithCGRect:CGRectMake(x, 0, width, self.frame.size.height)] atIndex:i];
+		
+		x+= width;
+	}
+	
+	self.contentSize = CGSizeMake(x, self.frame.size.height);
+	
+}
+
 - (NSInteger)numberOfColumns
 {
 	return [self.dataSource numberOfColumnsInHorizontalTableView:self];
 }
 
-- (HorizontalTableViewCell *)cellAtIndex:(NSInteger)index
+- (HorizontalTableViewCell *)reusableCellAtIndex:(int)index
+{
+	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
+	
+	if (cell)
+		return cell;
+	
+	cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
+	cell.index = index;
+	return cell;
+}
+
+- (HorizontalTableViewCell *)visibleCellAtIndex:(int)index
 {
 	for (UIView *view in self.subviews)
 	{
@@ -122,12 +236,10 @@
 		}
 	}
 	
-	HorizontalTableViewCell *cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
-	cell.index = index;
-	return cell;
+	return nil;
 }
 
-- (CGFloat)widthAtIndex:(NSInteger)index
+- (CGFloat)widthAtIndex:(int)index
 {
 	return [self.dataSource horizontalTableView:self widthForColumAtIndex:index];
 }
@@ -137,19 +249,7 @@
 	return CGRectMake(self.contentOffset.x, self.contentOffset.y, self.frame.size.width, self.frame.size.height);
 }
 
-/*- (CGRect)rectForColumnAtIndex:(NSInteger)index
-{
-	CGFloat x = 0;
-	
-	for (int i=0 ; i<self.numberOfColumns ; i++)
-	{
-		x += [self widthAtIndex:i];
-	}
-	
-	return CGRectMake(x, 0, [self widthAtIndex:index], self.frame.size.height);
-}*/
-
-- (void)reloadCellsInVisibleContent
+- (void)populateCellsInVisibleContent
 {
 	CGRect visibleRect = [self visibleRect];
 	
@@ -160,7 +260,7 @@
 		
 		if (CGRectIntersectsRect(visibleRect, rectForView))
 		{
-			HorizontalTableViewCell *cell = [self cellAtIndex:i];
+			HorizontalTableViewCell *cell = [self reusableCellAtIndex:i];
 			
 			// If cell is already added don't re-add, it causes lag
 			if (!cell.superview)
@@ -175,55 +275,47 @@
 	}
 }
 
+- (void)reloadColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation
+{
+	
+}
+
 - (HorizontalTableViewCell *)firstVisibleCell
 {
-	HorizontalTableViewCell *firstCell;
+	__block HorizontalTableViewCell *firstCell;
 	
-	for (UIView *view in self.subviews)
-	{
-		if ([view isKindOfClass:[HorizontalTableViewCell class]])
-		{
-			HorizontalTableViewCell *cell = (HorizontalTableViewCell *) view;
-			
-			if (!firstCell || cell.index < firstCell.index)
-				firstCell = cell;
-		}
-	}
+	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+		if (!firstCell || cell.index < firstCell.index)
+			firstCell = cell;
+	}];
 	
 	return firstCell;
 }
 
 - (HorizontalTableViewCell *)lastVisibleCell
 {
-	HorizontalTableViewCell *lastCell;
+	__block HorizontalTableViewCell *lastCell;
 	
-	for (UIView *view in self.subviews)
-	{
-		if ([view isKindOfClass:[HorizontalTableViewCell class]])
-		{
-			HorizontalTableViewCell *cell = (HorizontalTableViewCell *) view;
-			
-			if (!lastCell || cell.index > lastCell.index)
-				lastCell = cell;
-		}
-	}
+	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+		if (!lastCell || cell.index > lastCell.index)
+			lastCell = cell;
+	}];
 	
 	return lastCell;
 }
 
 - (void)enqueueInvisibleCells
 {
-	for (UIView *view in self.subviews)
-	{
-		if ([view isKindOfClass:[HorizontalTableViewCell class]] && !CGRectIntersectsRect(self.visibleRect, view.frame))
+	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+		if (!CGRectIntersectsRect(self.visibleRect, cell.frame))
 		{
-			HorizontalTableViewCell *cell = (HorizontalTableViewCell *)view;
-			//NSLog(@"enqueue: %d", cell.index);
-			
 			[cell removeFromSuperview];
-			[self.reusableCellQueue addObject:cell];
+			
+			// There is no need to store more than 2 cells in the queue one for left side, one for right side
+			if (self.reusableCellQueue.count <= 2)
+				[self.reusableCellQueue addObject:cell];
 		}
-	}
+	}];
 }
 
 @end

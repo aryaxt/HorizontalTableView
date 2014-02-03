@@ -12,6 +12,6 @@
 @interface HorizontalTableViewCell : UIView
 
 @property (nonatomic, strong) NSString *identifier;
-@property (nonatomic, assign) NSInteger index;
+@property (nonatomic, assign) int index;
 
 @end

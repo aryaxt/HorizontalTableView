@@ -13,5 +13,12 @@
 @interface ViewController : UIViewController <HorizontalTableViewDelegate, HorizontalTableViewDataSource>
 
 @property (nonatomic, strong) IBOutlet HorizontalTableView *horizontalTableView;
+@property (nonatomic, strong) IBOutlet UILabel *lblCellQueueStats;
+@property (nonatomic, strong) NSMutableArray *arrayOfStrings;
+@property (nonatomic, assign) int counter;
+
+- (IBAction)addRowAndReloadTable:(id)sender;
+- (IBAction)insertRowInTable:(id)sender;
+- (IBAction)deleteRowInTable:(id)sender;
 
 @end

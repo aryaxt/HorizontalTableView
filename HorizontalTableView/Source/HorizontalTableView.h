@@ -9,15 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "HorizontalTableViewCell.h"
 
+typedef enum ColumnAnimation {
+	HorizontalTableViewColumnAnimationNone
+}HorizontalTableViewColumnAnimation;
+
 @class HorizontalTableView;
 @protocol HorizontalTableViewDelegate <UIScrollViewDelegate>
-- (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(NSInteger)index;
+- (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(int)index;
 @end
 
 @protocol HorizontalTableViewDataSource <NSObject>
 - (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView;
-- (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSInteger)index;
-- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSInteger)index;
+- (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(int)index;
+- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(int)index;
 @end
 
 @interface HorizontalTableView : UIScrollView
@@ -26,8 +30,9 @@
 @property (nonatomic, weak) IBOutlet id <HorizontalTableViewDataSource> dataSource;
 
 - (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
-- (void)beginUpdates;
-- (void)endUpdates;
+- (void)deleteColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
+- (void)insertColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
+- (void)reloadColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)reloadData;
 
 @end
