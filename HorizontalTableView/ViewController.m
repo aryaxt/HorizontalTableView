@@ -48,7 +48,7 @@
 
 - (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSUInteger)index
 {
-	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableViewWithIdentifier:@"MyCell"];
+	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableCellWithIdentifier:@"MyCell"];
 	
 	if (!cell)
 	{

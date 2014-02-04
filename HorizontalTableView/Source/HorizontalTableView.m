@@ -62,6 +62,7 @@
 {
 	[super layoutSubviews];
 	
+	// While we are editing content manually we don't want these methods to get called
 	if (!self.isEditing)
 	{
 		[self enqueueInvisibleCells];
@@ -72,6 +73,16 @@
 }
 
 #pragma mark - Public Methods -
+
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier
+{
+	
+}
+
+- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier
+{
+	
+}
 
 - (NSUInteger)indexForSelectedRow
 {
@@ -193,7 +204,7 @@
 		[self removeCellFromViewAndEnqueueIfNeeded:cell];
 		HorizontalTableViewCell *reloadedCell = [self reusableCellAtIndex:index];
 		reloadedCell.frame = cell.frame;
-		[self insertSubview:reloadedCell aboveSubview:0];
+		[self insertSubview:reloadedCell atIndex:0];
 	}
 }
 
@@ -204,7 +215,7 @@
 	}];
 }
 
-- (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier
+- (HorizontalTableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
 {
 	for (int i=0 ; i<self.reusableCellQueue.count ; i++)
 	{
@@ -295,7 +306,7 @@
 	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
 	
 	if (!cell)
-		cell = cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
+		cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
 	
 	[cell setSelected:(index == self.selectedIndex) ? YES : NO animated:NO];
 	cell.index = index;
@@ -357,8 +368,6 @@
 			if (startedAddingCells)
 				break;
 		}
-		
-		// Improve performance get out of this loop
 	}
 }
 

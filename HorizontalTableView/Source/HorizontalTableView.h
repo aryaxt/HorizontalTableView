@@ -29,7 +29,7 @@ typedef enum ColumnAnimation {
 @property (nonatomic, weak) IBOutlet id <HorizontalTableViewDelegate> delegate;
 @property (nonatomic, weak) IBOutlet id <HorizontalTableViewDataSource> dataSource;
 
-- (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
+- (HorizontalTableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier;
 - (void)deleteColumnAtIndex:(NSUInteger)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)insertColumnAtIndex:(NSUInteger)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)reloadVisibleCellsWithColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
@@ -39,5 +39,7 @@ typedef enum ColumnAnimation {
 - (void)reloadData;
 - (NSUInteger)indexForSelectedRow;
 - (NSUInteger)indexForColumnAtPoint:(CGPoint)point;
+- (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
+- (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier;
 
 @end
