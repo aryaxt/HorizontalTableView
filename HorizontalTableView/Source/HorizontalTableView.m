@@ -97,18 +97,22 @@
 				cell.index--;
 		}];
 		
+		// Get the last visible cell, and if there is expected to be another after, then dequeue one and animate it in
 		HorizontalTableViewCell *lastVisibleCell = [self lastVisibleCell];
 		HorizontalTableViewCell *newCellToBeAddedToTheRight = (lastVisibleCell.index+1 < self.numberOfColumns)
-		? [self reusableCellAtIndex:lastVisibleCell.index+1]
-		: nil;
+			? [self reusableCellAtIndex:lastVisibleCell.index+1]
+			: nil;
+		
 		CGRect rectOfNewCellToBeAddedToTheRight = (newCellToBeAddedToTheRight)
-		? [[self.xLocationOfCells objectAtIndex:newCellToBeAddedToTheRight.index] CGRectValue]
-		: CGRectZero;
-		rectOfNewCellToBeAddedToTheRight.origin.x = lastVisibleCell.frame.size.width + lastVisibleCell.frame.origin.x;
-		newCellToBeAddedToTheRight.frame = rectOfNewCellToBeAddedToTheRight;
+			? [[self.xLocationOfCells objectAtIndex:newCellToBeAddedToTheRight.index] CGRectValue]
+			: CGRectZero;
 		
 		if (newCellToBeAddedToTheRight)
+		{
+			rectOfNewCellToBeAddedToTheRight.origin.x = lastVisibleCell.frame.size.width + lastVisibleCell.frame.origin.x;
+			newCellToBeAddedToTheRight.frame = rectOfNewCellToBeAddedToTheRight;
 			[self insertSubview:newCellToBeAddedToTheRight atIndex:0];
+		}
 		
 		[UIView animateWithDuration:ROW_ANIMATION_DURATION animations:^{
 			
@@ -167,15 +171,24 @@
 	}
 }
 
-- (void)enumerateThroughVisibleCells:(void (^)(HorizontalTableViewCell *cell))block
+- (void)reloadColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation
 {
-	for (UIView *view in self.subviews)
+	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
+	
+	if (cell)
 	{
-		if ([view isKindOfClass:[HorizontalTableViewCell class]])
-		{
-			block((HorizontalTableViewCell *)view);
-		}
+		[self removeCellFromViewAndEnqueueIfNeeded:cell];
+		HorizontalTableViewCell *reloadedCell = [self reusableCellAtIndex:index];
+		reloadedCell.frame = cell.frame;
+		[self addSubview:reloadedCell];
 	}
+}
+
+- (void)reloadVisibleCellsWithColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation
+{
+	[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
+		[self reloadColumnAtIndex:cell.index withColumnAnimation:columnAnimation];
+	}];
 }
 
 - (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier
@@ -195,6 +208,17 @@
 }
 
 #pragma mark - Private Methods -
+
+- (void)enumerateThroughVisibleCells:(void (^)(HorizontalTableViewCell *cell))block
+{
+	for (UIView *view in self.subviews)
+	{
+		if ([view isKindOfClass:[HorizontalTableViewCell class]])
+		{
+			block((HorizontalTableViewCell *)view);
+		}
+	}
+}
 
 - (void)removeVisibleCells
 {
@@ -294,11 +318,6 @@
 		
 		// Improve performance get out of this loop
 	}
-}
-
-- (void)reloadColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation
-{
-	
 }
 
 - (HorizontalTableViewCell *)firstVisibleCell

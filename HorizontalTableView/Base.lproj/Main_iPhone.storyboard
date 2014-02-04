@@ -66,7 +66,16 @@
                                 </state>
                                 <connections>
                                     <action selector="clearDataAndStats:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="zKl-aG-S4u"/>
-                                    <action selector="deleteRowInTable:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="qq1-n7-NXm"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bsd-Yi-Upu">
+                                <rect key="frame" x="26" y="469" width="131" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reload visible cells">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="reloadVisibleCells:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Djx-fA-zHW"/>
                                 </connections>
                             </button>
                         </subviews>

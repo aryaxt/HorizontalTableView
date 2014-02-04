@@ -119,6 +119,11 @@
 	[self printCellStats];
 }
 
+- (IBAction)reloadVisibleCells:(id)sender
+{
+	[self.horizontalTableView reloadVisibleCellsWithColumnAnimation:HorizontalTableViewColumnAnimationNone];
+}
+
 #pragma mark - Private Methods -
 
 - (void)printCellStats

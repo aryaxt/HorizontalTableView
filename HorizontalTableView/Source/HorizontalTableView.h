@@ -32,7 +32,7 @@ typedef enum ColumnAnimation {
 - (HorizontalTableViewCell *)dequeueReusableViewWithIdentifier:(NSString *)identifier;
 - (void)deleteColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)insertColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
-- (void)reloadColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
+- (void)reloadVisibleCellsWithColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)reloadData;
 
 @end
