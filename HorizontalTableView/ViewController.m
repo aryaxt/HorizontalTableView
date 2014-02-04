@@ -115,6 +115,8 @@
 	[self.horizontalTableView reloadData];
 	self.numberOfTimesInitializingCell = 0;
 	self.numberOfTimesDequeueingCells = 0;
+	self.insertCounter = 0;
+	
 	[[self.horizontalTableView valueForKey:@"reusableCellQueue"] removeAllObjects];
 	[self printCellStats];
 }
@@ -122,6 +124,12 @@
 - (IBAction)reloadVisibleCells:(id)sender
 {
 	[self.horizontalTableView reloadVisibleCellsWithColumnAnimation:HorizontalTableViewColumnAnimationNone];
+}
+
+- (IBAction)scrollToRandomCell:(id)sender
+{
+	int randomIndex = arc4random() % self.arrayOfStrings.count-1;
+	[self.horizontalTableView scrollToRowAtIndex:randomIndex animated:YES];
 }
 
 #pragma mark - Private Methods -

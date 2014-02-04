@@ -33,6 +33,8 @@ typedef enum ColumnAnimation {
 - (void)deleteColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)insertColumnAtIndex:(int)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)reloadVisibleCellsWithColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
+- (void)scrollToRowAtIndex:(int)index animated:(BOOL)animated;
+- (void)selectRowAtIndex:(int)index animated:(BOOL)animated;
 - (void)reloadData;
 
 @end

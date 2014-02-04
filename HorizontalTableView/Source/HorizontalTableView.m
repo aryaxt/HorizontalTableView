@@ -180,7 +180,7 @@
 		[self removeCellFromViewAndEnqueueIfNeeded:cell];
 		HorizontalTableViewCell *reloadedCell = [self reusableCellAtIndex:index];
 		reloadedCell.frame = cell.frame;
-		[self addSubview:reloadedCell];
+		[self insertSubview:reloadedCell aboveSubview:0];
 	}
 }
 
@@ -205,6 +205,17 @@
 	}
 	
 	return nil;
+}
+
+- (void)scrollToRowAtIndex:(int)index animated:(BOOL)animated
+{
+	CGRect rect = [[self.xLocationOfCells objectAtIndex:index] CGRectValue];
+	[self scrollRectToVisible:rect animated:animated];
+}
+
+- (void)selectRowAtIndex:(int)index animated:(BOOL)animated
+{
+	
 }
 
 #pragma mark - Private Methods -

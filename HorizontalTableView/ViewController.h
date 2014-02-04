@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#include <stdlib.h>
 #import "HorizontalTableView.h"
 #import "MyCell.h"
 
@@ -24,5 +25,6 @@
 - (IBAction)deleteRowInTable:(id)sender;
 - (IBAction)clearDataAndStats:(id)sender;
 - (IBAction)reloadVisibleCells:(id)sender;
+- (IBAction)scrollToRandomCell:(id)sender;
 
 @end
