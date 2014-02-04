@@ -14,4 +14,7 @@
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic, assign) int index;
 
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated;
+- (void)setHighLighted:(BOOL)highLighted animated:(BOOL)animate;
+
 @end

@@ -35,18 +35,18 @@
 
 #pragma mark - HorizontalTableViewDelegate & HorizontalTableViewDataSource -
 
-- (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
+- (NSUInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
 {
 	return self.arrayOfStrings.count;
 }
 
-- (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(int)index
+- (CGFloat)horizontalTableView:(HorizontalTableView *)horizontalTableView widthForColumAtIndex:(NSUInteger)index
 {
 	return 80;
 	return (index%2 == 0) ? 80 : 120;
 }
 
-- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(int)index
+- (HorizontalTableViewCell *)horizontalTableView:(HorizontalTableView *)horizontalTableView cellForColumnAtIndex:(NSUInteger)index
 {
 	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableViewWithIdentifier:@"MyCell"];
 	
@@ -66,9 +66,9 @@
 	return cell;
 }
 
-- (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(int)index
+- (void)horizontalTableView:(HorizontalTableView *)horizontalTableView didSelectColumnAtIndex:(NSUInteger)index
 {
-	
+	NSLog(@"selected: %lu", (unsigned long)index);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

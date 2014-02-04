@@ -10,26 +10,14 @@
 
 @implementation HorizontalTableViewCell
 
-- (id)initWithFrame:(CGRect)frame
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-		
-		self.layer.borderColor = [UIColor darkGrayColor].CGColor;
-		self.layer.borderWidth = .6;
-		
-    }
-    return self;
+	self.backgroundColor = (selected) ? [UIColor blueColor] : [UIColor whiteColor];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+- (void)setHighLighted:(BOOL)highLighted animated:(BOOL)animated
 {
-    // Drawing code
+	self.backgroundColor = (highLighted) ? [UIColor grayColor] : [UIColor whiteColor];
 }
-*/
 
 @end
