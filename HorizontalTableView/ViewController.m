@@ -26,6 +26,13 @@
 	[self printCellStats];
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+	
+	[self printCellStats];
+}
+
 #pragma mark - HorizontalTableViewDelegate & HorizontalTableViewDataSource -
 
 - (NSInteger)numberOfColumnsInHorizontalTableView:(HorizontalTableView *)horizontalTableView
@@ -80,18 +87,14 @@
 	}
 	
 	[self.horizontalTableView reloadData];
-	
 	[self printCellStats];
 }
 
 - (IBAction)insertRowInTable:(id)sender
 {
 	[self.arrayOfStrings insertObject:[NSString stringWithFormat:@"Insert %d", self.insertCounter] atIndex:0];
-	
 	[self.horizontalTableView insertColumnAtIndex:0 withColumnAnimation:HorizontalTableViewColumnAnimationNone];
-	
 	[self printCellStats];
-	
 	self.insertCounter++;
 }
 
@@ -101,9 +104,18 @@
 		return;
 	
 	[self.arrayOfStrings removeObjectAtIndex:0];
-	
 	[self.horizontalTableView deleteColumnAtIndex:0 withColumnAnimation:HorizontalTableViewColumnAnimationNone];
+	[self printCellStats];
+}
+
+- (IBAction)clearDataAndStats:(id)sender
+{
+	[self.arrayOfStrings removeAllObjects];
 	
+	[self.horizontalTableView reloadData];
+	self.numberOfTimesInitializingCell = 0;
+	self.numberOfTimesDequeueingCells = 0;
+	[[self.horizontalTableView valueForKey:@"reusableCellQueue"] removeAllObjects];
 	[self printCellStats];
 }
 

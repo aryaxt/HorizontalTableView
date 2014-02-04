@@ -22,5 +22,6 @@
 - (IBAction)addRowAndReloadTable:(id)sender;
 - (IBAction)insertRowInTable:(id)sender;
 - (IBAction)deleteRowInTable:(id)sender;
+- (IBAction)clearDataAndStats:(id)sender;
 
 @end
