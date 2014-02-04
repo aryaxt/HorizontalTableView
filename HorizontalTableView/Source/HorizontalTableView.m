@@ -97,6 +97,19 @@
 				cell.index--;
 		}];
 		
+		HorizontalTableViewCell *lastVisibleCell = [self lastVisibleCell];
+		HorizontalTableViewCell *newCellToBeAddedToTheRight = (lastVisibleCell.index+1 < self.numberOfColumns)
+		? [self reusableCellAtIndex:lastVisibleCell.index+1]
+		: nil;
+		CGRect rectOfNewCellToBeAddedToTheRight = (newCellToBeAddedToTheRight)
+		? [[self.xLocationOfCells objectAtIndex:newCellToBeAddedToTheRight.index] CGRectValue]
+		: CGRectZero;
+		rectOfNewCellToBeAddedToTheRight.origin.x = lastVisibleCell.frame.size.width + lastVisibleCell.frame.origin.x;
+		newCellToBeAddedToTheRight.frame = rectOfNewCellToBeAddedToTheRight;
+		
+		if (newCellToBeAddedToTheRight)
+			[self insertSubview:newCellToBeAddedToTheRight atIndex:0];
+		
 		[UIView animateWithDuration:ROW_ANIMATION_DURATION animations:^{
 			
 			CGRect rect = deletingRow.frame;
@@ -108,7 +121,7 @@
 					cell.frame = [[self.xLocationOfCells objectAtIndex:cell.index] CGRectValue];
 			}];
 		} completion:^(BOOL finished) {
-			[deletingRow removeFromSuperview];
+			[self removeCellFromViewAndEnqueueIfNeeded:deletingRow];
 			self.isEditing = NO;
 		}];
 	}
