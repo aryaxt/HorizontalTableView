@@ -263,6 +263,9 @@
 
 - (void)selectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+	HorizontalTableViewCell *currentSelectedCell = [self visibleCellAtIndex:self.selectedIndex];
+	[currentSelectedCell setSelected:NO animated:NO];
+	
 	self.selectedIndex = index;
 	
 	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
@@ -494,15 +497,7 @@
 	
 	if (self.cellBeingTouched == cell)
 	{
-		[self enumerateThroughVisibleCells:^(HorizontalTableViewCell *cell) {
-			if (cell != self.cellBeingTouched)
-			{
-				[cell setSelected:NO animated:NO];
-				[cell setHighLighted:NO animated:NO];
-			}
-		}];
-		
-		[cell setSelected:YES animated:NO];
+		[self selectColumnAtIndex:cell.index animated:NO];
 	
 		if (self.selectedIndex != cell.index)
 			[self.delegate horizontalTableView:self didSelectColumnAtIndex:cell.index];
