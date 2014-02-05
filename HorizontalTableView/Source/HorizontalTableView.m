@@ -86,7 +86,7 @@
 	[self.registeredNibsAndClasses setObject:cellClass forKey:identifier];
 }
 
-- (NSUInteger)indexForSelectedRow
+- (NSUInteger)indexForSelectedColumn
 {
 	return self.selectedIndex;
 }
@@ -255,20 +255,26 @@
 	return nil;
 }
 
-- (void)scrollToRowAtIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)scrollToColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
 	CGRect rect = [[self.rectOfCells objectAtIndex:index] CGRectValue];
 	[self scrollRectToVisible:rect animated:animated];
 }
 
-- (void)selectRowAtIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)selectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+	self.selectedIndex = index;
 	
+	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
+	[cell setSelected:YES animated:animated];
 }
 
-- (void)deselectRowAtIndex:(NSUInteger)index animated:(BOOL)animated
+- (void)deselectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
+	self.selectedIndex = NSNotFound;
 	
+	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
+	[cell setSelected:NO animated:animated];
 }
 
 - (NSUInteger)indexForColumnAtPoint:(CGPoint)point

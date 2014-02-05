@@ -134,7 +134,7 @@
 - (IBAction)scrollToRandomCell:(id)sender
 {
 	int randomIndex = arc4random() % self.arrayOfStrings.count-1;
-	[self.horizontalTableView scrollToRowAtIndex:randomIndex animated:YES];
+	[self.horizontalTableView scrollToColumnAtIndex:randomIndex animated:YES];
 }
 
 #pragma mark - Private Methods -

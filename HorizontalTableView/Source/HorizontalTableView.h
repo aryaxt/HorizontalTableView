@@ -33,13 +33,13 @@ typedef enum ColumnAnimation {
 - (void)deleteColumnAtIndex:(NSUInteger)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)insertColumnAtIndex:(NSUInteger)index withColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
 - (void)reloadVisibleCellsWithColumnAnimation:(HorizontalTableViewColumnAnimation)columnAnimation;
-- (void)scrollToRowAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)selectRowAtIndex:(NSUInteger)index animated:(BOOL)animated;
-- (void)deselectRowAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)scrollToColumnAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)selectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated;
+- (void)deselectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)reloadData;
 - (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
 - (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier;
-- (NSUInteger)indexForSelectedRow;
+- (NSUInteger)indexForSelectedColumn;
 - (NSUInteger)indexForColumnAtPoint:(CGPoint)point;
 
 @end
