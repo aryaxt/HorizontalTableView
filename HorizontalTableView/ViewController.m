@@ -50,6 +50,11 @@
 {
 	MyCell *cell = (MyCell *) [self.horizontalTableView dequeueReusableCellWithIdentifier:@"MyCell"];
 	
+	// The code below is not needed if you register a nib or class for the reuseIdentifier
+	// When you do register a nib or class dequeue would automtically initialize a cell
+	// and the result of dequeueReusableCellWithIdentifier will never be nil
+	// EX: Call below in viewDidLoad
+	// [self.horizontalTableView registerNib:[UINib nibWithNibName:@"MyCell" bundle:nil] forCellReuseIdentifier:@"MyCell"];
 	if (!cell)
 	{
 		cell = [[MyCell alloc] init];

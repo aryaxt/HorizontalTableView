@@ -37,9 +37,9 @@ typedef enum ColumnAnimation {
 - (void)selectRowAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)deselectRowAtIndex:(NSUInteger)index animated:(BOOL)animated;
 - (void)reloadData;
-- (NSUInteger)indexForSelectedRow;
-- (NSUInteger)indexForColumnAtPoint:(CGPoint)point;
 - (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
 - (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier;
+- (NSUInteger)indexForSelectedRow;
+- (NSUInteger)indexForColumnAtPoint:(CGPoint)point;
 
 @end

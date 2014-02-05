@@ -10,6 +10,7 @@
 
 @interface HorizontalTableView()
 @property (nonatomic, strong) HorizontalTableViewCell *cellBeingTouched;
+@property (nonatomic, strong) NSMutableDictionary *registeredNibsAndClasses;
 @property (nonatomic, assign) CGPoint touchStartPoint;
 @property (nonatomic, strong) NSMutableArray *reusableCellQueue;
 @property (nonatomic, strong) NSMutableArray *rectOfCells;
@@ -53,6 +54,7 @@
 	self.alwaysBounceHorizontal = YES;
 	self.rectOfCells = [NSMutableArray array];
 	self.reusableCellQueue = [NSMutableArray array];
+	self.registeredNibsAndClasses = [NSMutableDictionary dictionary];
 	self.allowsSelection = YES;
 }
 
@@ -76,12 +78,12 @@
 
 - (void)registerNib:(UINib *)nib forCellReuseIdentifier:(NSString *)identifier
 {
-	
+	[self.registeredNibsAndClasses setObject:nib forKey:identifier];
 }
 
 - (void)registerClass:(Class)cellClass forCellReuseIdentifier:(NSString *)identifier
 {
-	
+	[self.registeredNibsAndClasses setObject:cellClass forKey:identifier];
 }
 
 - (NSUInteger)indexForSelectedRow
@@ -225,6 +227,28 @@
 		{
 			[self.reusableCellQueue removeObject:cell];
 			return cell;
+		}
+	}
+	
+	id registeredClassOrNib = [self.registeredNibsAndClasses objectForKey:identifier];
+	
+	if (registeredClassOrNib)
+	{
+		if ([registeredClassOrNib isKindOfClass:[UINib class]])
+		{
+			HorizontalTableViewCell *cell = [[registeredClassOrNib instantiateWithOwner:nil options:nil] lastObject];
+			
+			if (![cell isKindOfClass:[HorizontalTableViewCell class]])
+				@throw ([NSException exceptionWithName:@"InvalidSubclassOfCell" reason:@"Invalid cell, Cells must be subclasses of HorizontalTableViewCell" userInfo:nil]);
+			
+			return cell;
+		}
+		else
+		{
+			if (![[registeredClassOrNib class] isSubclassOfClass:[HorizontalTableViewCell class]])
+				@throw ([NSException exceptionWithName:@"InvalidSubclassOfCell" reason:@"Invalid cell, Cells must be subclasses of HorizontalTableViewCell" userInfo:nil]);
+			
+			return [[[registeredClassOrNib class] alloc] initWithFrame:CGRectZero];
 		}
 	}
 	
