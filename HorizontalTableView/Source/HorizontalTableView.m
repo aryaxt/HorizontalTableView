@@ -507,4 +507,9 @@
 	}
 }
 
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[self.cellBeingTouched setHighLighted:NO animated:NO];
+}
+
 @end
