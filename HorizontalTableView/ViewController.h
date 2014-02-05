@@ -26,5 +26,7 @@
 - (IBAction)clearDataAndStats:(id)sender;
 - (IBAction)reloadVisibleCells:(id)sender;
 - (IBAction)scrollToRandomCell:(id)sender;
+- (IBAction)selectRandomCell:(id)sender;
+- (IBAction)deselectCell:(id)sender;
 
 @end

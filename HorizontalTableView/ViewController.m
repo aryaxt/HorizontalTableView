@@ -137,6 +137,16 @@
 	[self.horizontalTableView scrollToColumnAtIndex:randomIndex animated:YES];
 }
 
+- (IBAction)selectRandomCell:(id)sender
+{
+	[self.horizontalTableView selectColumnAtIndex:0 animated:YES];
+}
+
+- (IBAction)deselectCell:(id)sender
+{
+	[self.horizontalTableView deselectColumnAtIndex:[self.horizontalTableView indexForSelectedColumn] animated:YES];
+}
+
 #pragma mark - Private Methods -
 
 - (void)printCellStats
