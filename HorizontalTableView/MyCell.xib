@@ -15,7 +15,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                     <color key="textColor" red="0.43137258290000002" green="0.058823533359999999" blue="0.39607846740000002" alpha="1" colorSpace="deviceRGB"/>
-                    <nil key="highlightedColor"/>
+                    <color key="highlightedColor" red="0.96439273969999995" green="1" blue="0.19383566830000001" alpha="1" colorSpace="calibratedRGB"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>

@@ -263,13 +263,13 @@
 
 - (void)selectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
 {
-	HorizontalTableViewCell *currentSelectedCell = [self visibleCellAtIndex:self.selectedIndex];
-	[currentSelectedCell setSelected:NO animated:NO];
+	[self deselectColumnAtIndex:self.selectedIndex animated:NO];
 	
 	self.selectedIndex = index;
 	
 	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
 	[cell setSelected:YES animated:animated];
+	[cell setHighLighted:YES animated:animated];
 }
 
 - (void)deselectColumnAtIndex:(NSUInteger)index animated:(BOOL)animated
@@ -278,6 +278,7 @@
 	
 	HorizontalTableViewCell *cell = [self visibleCellAtIndex:index];
 	[cell setSelected:NO animated:animated];
+	[cell setHighLighted:NO animated:animated];
 }
 
 - (NSUInteger)indexForColumnAtPoint:(CGPoint)point
@@ -342,6 +343,7 @@
 		cell = [self.dataSource horizontalTableView:self cellForColumnAtIndex:index];
 	
 	[cell setSelected:(index == self.selectedIndex) ? YES : NO animated:NO];
+	[cell setHighLighted:(index == self.selectedIndex) ? YES : NO animated:NO];
 	cell.index = index;
 	
 	return cell;

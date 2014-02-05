@@ -8,6 +8,11 @@
 
 #import "HorizontalTableViewCell.h"
 
+typedef enum {
+	HighlightTypeHighlighted,
+	HighlightTypeSelected
+}HighlightType;
+
 @interface HorizontalTableViewCell()
 @property (nonatomic, strong) UIView *highLightAndSelectedView;
 @end
@@ -18,17 +23,17 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-	[self showHighlightView:selected animated:animated];
+	[self showHighlightView:selected withHighlighType:HighlightTypeSelected animated:animated];
 }
 
 - (void)setHighLighted:(BOOL)highLighted animated:(BOOL)animated
 {
-	[self showHighlightView:highLighted animated:animated];
+	[self showHighlightView:highLighted withHighlighType:HighlightTypeHighlighted animated:animated];
 }
 
 #pragma mark - Private Methods -
 
-- (void)showHighlightView:(BOOL)show animated:(BOOL)animated
+- (void)showHighlightView:(BOOL)show withHighlighType:(HighlightType)highlightType animated:(BOOL)animated
 {
 	if (show)
 	{
@@ -46,6 +51,14 @@
 		} completion:^(BOOL finished){
 			[self.highLightAndSelectedView removeFromSuperview];
 		}];
+	}
+	
+	for (UIView *view in self.subviews)
+	{
+		if (highlightType == HighlightTypeHighlighted && [view respondsToSelector:@selector(setHighlighted:)])
+			[(id)view setHighlighted:show];
+		else if (highlightType == HighlightTypeSelected && [view respondsToSelector:@selector(setSelected:)])
+			[(id)view setSelected:show];
 	}
 }
 
